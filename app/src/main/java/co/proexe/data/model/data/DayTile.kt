@@ -1,4 +1,4 @@
-package co.proexe.model.data
+package co.proexe.data.model.data
 
 import androidx.annotation.StringRes
 

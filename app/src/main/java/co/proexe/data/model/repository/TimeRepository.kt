@@ -1,7 +1,7 @@
-package co.proexe.model.repository
+package co.proexe.data.model.repository
 
 import co.proexe.R
-import co.proexe.model.data.DayTile
+import co.proexe.data.model.data.DayTile
 import java.util.*
 import kotlinx.coroutines.delay
 
