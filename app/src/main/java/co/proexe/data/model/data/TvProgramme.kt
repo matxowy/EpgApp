@@ -1,6 +1,6 @@
-package co.proexe.model.data
+package co.proexe.data.model.data
 
-import java.util.*
+import java.time.LocalDateTime
 
 data class TvProgramme(
     val id: Int,
@@ -9,7 +9,7 @@ data class TvProgramme(
     val type: String,
     val category: TvProgrammeCategory,
     val isFavourite: Boolean,
-    val startTime: Date,
-    val endTime: Date,
+    val startTime: LocalDateTime,
+    val endTime: LocalDateTime,
     val progressPercent: Int
 )

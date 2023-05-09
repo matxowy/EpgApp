@@ -1,3 +1,7 @@
+plugins {
+    id("com.google.dagger.hilt.android") version "2.44" apply false
+}
+
 buildscript {
     repositories {
         gradlePluginPortal()
@@ -5,7 +9,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0")
         classpath("com.android.tools.build:gradle:7.2.2")
     }
 }
@@ -14,6 +18,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven(url = "https://maven.fabric.io/public")
     }
 }
 
