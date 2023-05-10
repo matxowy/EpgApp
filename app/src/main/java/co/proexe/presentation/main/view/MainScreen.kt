@@ -1,6 +1,7 @@
 package co.proexe.presentation.main.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,15 +21,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import co.proexe.R
@@ -36,11 +36,15 @@ import co.proexe.app.utils.extensions.toTwoDigitString
 import co.proexe.data.source.tvprogramme.model.data.TvProgramme
 import co.proexe.presentation.common.CircularLoadingIndicator
 import co.proexe.presentation.common.theme.AppDimensions
+import co.proexe.presentation.common.theme.AppTypography.appTitle
+import co.proexe.presentation.common.theme.AppTypography.dayLabel
+import co.proexe.presentation.common.theme.AppTypography.programmeDescription
+import co.proexe.presentation.common.theme.AppTypography.programmeTitle
 import co.proexe.presentation.common.theme.Blue
 import co.proexe.presentation.common.theme.LightDark
+import co.proexe.presentation.common.theme.MediumDark
 import co.proexe.presentation.common.theme.Silver
 import co.proexe.presentation.common.theme.Spacing
-import co.proexe.presentation.common.theme.White
 import co.proexe.presentation.main.view.MainScreenConstants.MAX_PERCENTAGE
 import co.proexe.presentation.main.viewmodel.MainScreenViewModel
 import co.proexe.presentation.main.viewmodel.MainScreenViewModel.MainScreenUiState.Loading
@@ -53,22 +57,6 @@ fun MainScreen(
     navController: NavController? = null,
     mainScreenViewModel: MainScreenViewModel = hiltViewModel()
 ) {
-    // TODO [EPG-03] Add getting list of timestamps
-    val list = remember { listOf("Wczoraj", "Dzisiaj", "Jutro") }
-//    val tvProgramme = listOf(
-//        TvProgramme(
-//            id = 0,
-//            title = "Ukryta prawda",
-//            imageUrl = "",
-//            type = "Kryminał",
-//            category = TvProgrammeCategory.ALL,
-//            isFavourite = false,
-//            startTime = LocalDateTime.now(),
-//            endTime = LocalDateTime.now().plusHours(2),
-//            progressPercent = 0
-//        )
-//    )
-
     val uiState by mainScreenViewModel.uiState.collectAsState()
 
     when (uiState) {
@@ -76,7 +64,10 @@ fun MainScreen(
             CircularLoadingIndicator()
         }
         is Success -> {
-            MainScreenContent(list, (uiState as Success).tvProgramsList)
+            MainScreenContent(
+                dayLabels = (uiState as Success).dayLabelsList,
+                tvPrograms = (uiState as Success).tvProgramsList
+            )
         }
     }
 
@@ -87,18 +78,18 @@ fun MainScreen(
 
 @Composable
 private fun MainScreenContent(
-    list: List<String>,
+    dayLabels: List<Int>,
     tvPrograms: List<TvProgramme>
 ) {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
         AppBar()
-        TimeStampsRow(list)
+        TimeStampsRow(dayLabels)
         ProgramsColumn(tvPrograms)
     }
 }
 
 @Composable
-private fun TimeStampsRow(list: List<String>) {
+private fun TimeStampsRow(dayLabels: List<Int>) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(
             space = Spacing.veryBigPadding,
@@ -108,10 +99,19 @@ private fun TimeStampsRow(list: List<String>) {
         contentPadding = PaddingValues(Spacing.smallPadding),
         modifier = Modifier
             .background(LightDark)
-            .height(44.dp)
+            .height(AppDimensions.dayLabelsBarHeight)
             .fillMaxWidth()
+
     ) {
-        items(list.size) { Text(text = list[it], color = Silver) }
+        items(dayLabels.size) {
+            Text(
+                text = stringResource(id = dayLabels[it]),
+                color = Silver,
+                style = dayLabel,
+                modifier = Modifier
+                    .clickable { } // TODO Add function to manage click on day label
+            )
+        }
     }
 }
 
@@ -131,7 +131,7 @@ private fun ProgramsColumn(tvProgramme: List<TvProgramme>) {
                 tvProgramme[it].imageUrl,
                 tvProgramme[it].progressPercent,
             )
-            Divider(color = White, thickness = 1.dp)
+            Divider(color = MediumDark, thickness = AppDimensions.itemDividerHeight)
         }
     }
 }
@@ -152,6 +152,7 @@ fun ProgrammeItem(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
+            .padding(Spacing.smallPadding)
     ) {
         AsyncImage(
             model = imageUrl,
@@ -168,15 +169,7 @@ fun ProgrammeItem(
                 .weight(1f)
                 .padding(Spacing.smallPadding)
         ) {
-            Text(text = title, color = Silver)
-            Text(text = "$durationFormatted | $type", color = Silver)
-            LinearProgressIndicator(
-                progress = progressPercent.toFloat() / MAX_PERCENTAGE,
-                color = Blue,
-                modifier = Modifier
-                    .padding(bottom = Spacing.mediumPadding)
-                    .fillMaxWidth()
-            )
+            ProgrammeDescription(title, durationFormatted, type, progressPercent)
         }
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_more_vert_white_24dp),
@@ -186,6 +179,28 @@ fun ProgrammeItem(
                 .padding(Spacing.smallPadding)
         )
     }
+}
+
+@Composable
+private fun ProgrammeDescription(title: String, durationFormatted: String, type: String, progressPercent: Int) {
+    Text(
+        text = title,
+        color = Silver,
+        style = programmeTitle
+    )
+    Text(
+        text = "$durationFormatted | $type",
+        color = Silver,
+        style = programmeDescription
+    )
+    LinearProgressIndicator(
+        progress = progressPercent.toFloat() / MAX_PERCENTAGE,
+        color = Blue,
+        trackColor = MediumDark,
+        modifier = Modifier
+            .padding(bottom = Spacing.mediumPadding)
+            .fillMaxWidth()
+    )
 }
 
 
@@ -238,6 +253,7 @@ private fun LeftSectionOfAppBar() {
         Text(
             text = "Program TV",
             color = Silver,
+            style = appTitle,
             modifier = Modifier
                 .padding(start = Spacing.mediumPadding)
         )

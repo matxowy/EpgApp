@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.proexe.data.source.tvprogramme.model.data.TvProgramme
-import co.proexe.domain.main.usecases.GetTvProgramsUseCase
+import co.proexe.domain.time.usecases.GetDayTilesUseCase
+import co.proexe.domain.tvprogramme.usecases.GetTvProgramsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,7 @@ import javax.inject.Named
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val getTvProgramsUseCase: GetTvProgramsUseCase,
+    private val getDayTilesUseCase: GetDayTilesUseCase,
     @Named("IO") private val coroutineDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
@@ -25,8 +27,10 @@ class MainScreenViewModel @Inject constructor(
     fun loadData() {
         viewModelScope.launch(coroutineDispatcher) {
             try {
+                // TODO integrate it with TimeStamps, for now dummy implementation only with labels
+                val dayLabelsResource = getDayTilesUseCase().map { it.dayLabel }
                 val tvProgramsList = getTvProgramsUseCase()
-                _uiState.value = MainScreenUiState.Success(listOf(), tvProgramsList)
+                _uiState.value = MainScreenUiState.Success(dayLabelsResource, tvProgramsList)
             } catch (e: Exception) {
                 Log.e("RETROFIT", e.toString())
             }
@@ -35,7 +39,7 @@ class MainScreenViewModel @Inject constructor(
 
     sealed class MainScreenUiState {
         data class Success(
-            val timeStampsList: List<String>,
+            val dayLabelsList: List<Int>,
             val tvProgramsList: List<TvProgramme>
         ) : MainScreenUiState()
         object Loading : MainScreenUiState()

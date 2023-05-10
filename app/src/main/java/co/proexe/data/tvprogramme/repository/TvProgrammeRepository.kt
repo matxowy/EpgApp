@@ -1,7 +1,7 @@
-package co.proexe.data.main.repository
+package co.proexe.data.tvprogramme.repository
 
 import co.proexe.data.source.tvprogramme.model.data.TvProgramme
 
-interface MainRepository {
+interface TvProgrammeRepository {
     suspend fun getTvPrograms(): List<TvProgramme>
 }
