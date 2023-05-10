@@ -5,7 +5,7 @@ import co.proexe.data.source.tvprogramme.TvProgrammeConverter
 import co.proexe.data.source.tvprogramme.model.data.TvProgramme
 import javax.inject.Inject
 
-class TvProgrammeRepositoryRemoteRepository @Inject constructor(
+class TvProgrammeRemoteRepository @Inject constructor(
     private val tvProgrammeApi: TvProgrammeApi,
     private val tvProgrammeConverter: TvProgrammeConverter
 ) : TvProgrammeRepository {
