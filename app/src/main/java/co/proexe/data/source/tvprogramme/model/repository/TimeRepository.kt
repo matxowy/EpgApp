@@ -1,7 +1,7 @@
-package co.proexe.data.model.repository
+package co.proexe.data.source.tvprogramme.model.repository
 
 import co.proexe.R
-import co.proexe.data.model.data.DayTile
+import co.proexe.data.source.tvprogramme.model.data.DayTile
 import java.util.*
 import kotlinx.coroutines.delay
 
