@@ -47,6 +47,7 @@ import co.proexe.presentation.common.theme.Silver
 import co.proexe.presentation.common.theme.Spacing
 import co.proexe.presentation.main.view.MainScreenConstants.MAX_PERCENTAGE
 import co.proexe.presentation.main.viewmodel.MainScreenViewModel
+import co.proexe.presentation.main.viewmodel.MainScreenViewModel.MainScreenUiState.Error
 import co.proexe.presentation.main.viewmodel.MainScreenViewModel.MainScreenUiState.Loading
 import co.proexe.presentation.main.viewmodel.MainScreenViewModel.MainScreenUiState.Success
 import coil.compose.AsyncImage
@@ -68,6 +69,9 @@ fun MainScreen(
                 dayLabels = (uiState as Success).dayLabelsList,
                 tvPrograms = (uiState as Success).tvProgramsList
             )
+        }
+        is Error -> {
+            CircularLoadingIndicator() // TODO Add error screen to inform user what happened
         }
     }
 

@@ -32,7 +32,7 @@ class MainScreenViewModel @Inject constructor(
                 val tvProgramsList = getTvProgramsUseCase()
                 _uiState.value = MainScreenUiState.Success(dayLabelsResource, tvProgramsList)
             } catch (e: Exception) {
-                Log.e("RETROFIT", e.toString())
+                _uiState.value = MainScreenUiState.Error
             }
         }
     }
@@ -43,5 +43,6 @@ class MainScreenViewModel @Inject constructor(
             val tvProgramsList: List<TvProgramme>
         ) : MainScreenUiState()
         object Loading : MainScreenUiState()
+        object Error : MainScreenUiState()
     }
 }

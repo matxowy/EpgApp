@@ -40,6 +40,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    sourceSets {
+        getByName("main") {
+            java.srcDirs("src/main/java")
+        }
+        getByName("test") {
+            java.srcDirs("src/test/java")
+        }
+    }
 }
 
 dependencies {
@@ -88,10 +96,10 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
 
     // Testing
     testImplementation("io.mockk:mockk:1.13.5")
     testImplementation("io.kotest:kotest-assertions-core-jvm:5.6.1")
-
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
+    testImplementation("junit:junit:4.12")
 }
