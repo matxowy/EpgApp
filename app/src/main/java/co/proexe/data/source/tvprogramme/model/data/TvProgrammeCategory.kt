@@ -1,4 +1,4 @@
-package co.proexe.data.model.data
+package co.proexe.data.source.tvprogramme.model.data
 
 enum class TvProgrammeCategory {
     ALL,

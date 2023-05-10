@@ -43,6 +43,7 @@ android {
 }
 
 dependencies {
+    // TODO Extract libraries version
     implementation("androidx.appcompat:appcompat:1.4.2")
     implementation("androidx.core:core-ktx:1.8.0")
 
@@ -54,10 +55,14 @@ dependencies {
     // Compose foundation
     implementation("androidx.compose.foundation:foundation:1.4.3")
 
+    // Compose navigation
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
+
     // Integration with activities
-    implementation("androidx.activity:activity-compose:1.6.1")
+    implementation("androidx.activity:activity-compose:1.7.0")
     // Integration with ViewModels
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     // Integration with LiveData
     implementation("androidx.compose.runtime:runtime-livedata")
 
@@ -73,8 +78,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 
     // Dagger Hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.44.2")
+    kapt("com.google.dagger:hilt-android-compiler:2.44.2")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
