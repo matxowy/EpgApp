@@ -9,7 +9,7 @@ import co.proexe.R
 object AppFonts {
     val poppins = FontFamily(
         Font(
-            resId = R.font.poppins_extralight,
+            resId = R.font.poppins_regular,
             style = FontStyle.Normal,
             weight = FontWeight.W300,
         ),
