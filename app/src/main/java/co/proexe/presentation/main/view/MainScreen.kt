@@ -1,7 +1,11 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package co.proexe.presentation.main.view
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -24,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -51,7 +57,6 @@ import co.proexe.presentation.main.viewmodel.MainScreenViewModel.MainScreenUiSta
 import co.proexe.presentation.main.viewmodel.MainScreenViewModel.MainScreenUiState.Loading
 import co.proexe.presentation.main.viewmodel.MainScreenViewModel.MainScreenUiState.Success
 import coil.compose.AsyncImage
-import java.time.LocalDateTime
 
 @Composable
 fun MainScreen(
@@ -59,6 +64,7 @@ fun MainScreen(
     mainScreenViewModel: MainScreenViewModel = hiltViewModel()
 ) {
     val uiState by mainScreenViewModel.uiState.collectAsState()
+    val tvProgrammeListState by mainScreenViewModel.tvProgramsListState.collectAsState()
 
     when (uiState) {
         is Loading -> {
@@ -67,7 +73,8 @@ fun MainScreen(
         is Success -> {
             MainScreenContent(
                 dayLabels = (uiState as Success).dayLabelsList,
-                tvPrograms = (uiState as Success).tvProgramsList
+                tvPrograms = tvProgrammeListState,
+                onItemLongPress = { mainScreenViewModel.onItemLongPress(it) }
             )
         }
         is Error -> {
@@ -83,12 +90,13 @@ fun MainScreen(
 @Composable
 private fun MainScreenContent(
     dayLabels: List<Int>,
-    tvPrograms: List<TvProgramme>
+    tvPrograms: List<TvProgramme>,
+    onItemLongPress: (Int) -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
         AppBar()
         TimeStampsRow(dayLabels)
-        ProgramsColumn(tvPrograms)
+        ProgramsColumn(tvPrograms, onItemLongPress)
     }
 }
 
@@ -120,21 +128,17 @@ private fun TimeStampsRow(dayLabels: List<Int>) {
 }
 
 @Composable
-private fun ProgramsColumn(tvProgramme: List<TvProgramme>) {
+private fun ProgramsColumn(
+    tvProgrammeList: List<TvProgramme>,
+    onItemLongPress: (Int) -> Unit,
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
             .padding(Spacing.smallPadding)
     ) {
-        items(tvProgramme.size) {
-            ProgrammeItem(
-                tvProgramme[it].title,
-                tvProgramme[it].type,
-                tvProgramme[it].startTime,
-                tvProgramme[it].endTime,
-                tvProgramme[it].imageUrl,
-                tvProgramme[it].progressPercent,
-            )
+        items(items = tvProgrammeList, key = { programme -> programme.id }) { tvProgramme ->
+            ProgrammeItem(programme = tvProgramme, onItemLongPress = onItemLongPress, modifier = Modifier.animateItemPlacement())
             Divider(color = MediumDark, thickness = AppDimensions.itemDividerHeight)
         }
     }
@@ -142,24 +146,26 @@ private fun ProgramsColumn(tvProgramme: List<TvProgramme>) {
 
 @Composable
 fun ProgrammeItem(
-    title: String,
-    type: String,
-    startTime: LocalDateTime,
-    endTime: LocalDateTime,
-    imageUrl: String,
-    progressPercent: Int
+    programme: TvProgramme,
+    onItemLongPress: (Int) -> Unit,
+    modifier: Modifier,
 ) {
-    val durationFormatted =
-        "${startTime.hour.toTwoDigitString()}:${startTime.minute.toTwoDigitString()} - ${endTime.hour.toTwoDigitString()}:${endTime.minute.toTwoDigitString()}"
+    val durationFormatted = "${programme.startTime.hour.toTwoDigitString()}:${programme.startTime.minute.toTwoDigitString()} -" +
+            " ${programme.endTime.hour.toTwoDigitString()}:${programme.endTime.minute.toTwoDigitString()}"
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(Spacing.smallPadding)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onLongPress = { onItemLongPress(programme.id) }
+                )
+            }
     ) {
         AsyncImage(
-            model = imageUrl,
+            model = programme.imageUrl,
             contentDescription = null,
             placeholder = painterResource(id = R.drawable.logo),
             contentScale = ContentScale.Fit,
@@ -173,7 +179,16 @@ fun ProgrammeItem(
                 .weight(1f)
                 .padding(Spacing.smallPadding)
         ) {
-            ProgrammeDescription(title, durationFormatted, type, progressPercent)
+            ProgrammeDescription(programme.title, durationFormatted, programme.type, programme.progressPercent)
+        }
+        if (programme.isFavorite) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_fav),
+                contentDescription = "",
+                tint = Silver,
+                modifier = Modifier
+                    .padding(Spacing.smallPadding)
+            )
         }
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_more_vert_white_24dp),

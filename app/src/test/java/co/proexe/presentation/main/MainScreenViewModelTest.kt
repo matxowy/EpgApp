@@ -4,6 +4,8 @@ import co.proexe.domain.time.usecases.GetDayTilesUseCase
 import co.proexe.domain.tvprogramme.usecases.GetTvProgramsUseCase
 import co.proexe.presentation.main.viewmodel.MainScreenViewModel
 import co.proexe.util.DayTilesTestHelper.mockkListOfDayTiles
+import co.proexe.util.TvProgrammeTestHelper.mockkFavoriteOnTopTvProgrammeList
+import co.proexe.util.TvProgrammeTestHelper.mockkNoFavoriteTvProgrammeList
 import co.proexe.util.TvProgrammeTestHelper.mockkTvProgrammeList
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -60,7 +62,7 @@ class MainScreenViewModelTest {
 
         systemUnderTest.loadData()
 
-        systemUnderTest.uiState.value shouldBe MainScreenViewModel.MainScreenUiState.Success(listOfDayLabels, mockkTvProgrammeList)
+        systemUnderTest.uiState.value shouldBe MainScreenViewModel.MainScreenUiState.Success(listOfDayLabels)
     }
 
     @Test
@@ -81,4 +83,23 @@ class MainScreenViewModelTest {
         systemUnderTest.uiState.value should beInstanceOf<MainScreenViewModel.MainScreenUiState.Error>()
     }
 
+    @Test
+    fun `when onLongItemPress is triggered and program is not favorite then tvProgramsState value should be changed to proper list with favorite on top`() {
+        coEvery { mockkGetTvProgramsUseCase() } returns mockkNoFavoriteTvProgrammeList
+        systemUnderTest.loadData()
+
+        systemUnderTest.onItemLongPress(1)
+
+        systemUnderTest.tvProgramsListState.value shouldBe mockkFavoriteOnTopTvProgrammeList
+    }
+
+    @Test
+    fun `when onLongItemPress is triggered and program is favorite then tvProgramsState value should be changed to proper list with program on proper position`() {
+        coEvery { mockkGetTvProgramsUseCase() } returns mockkFavoriteOnTopTvProgrammeList
+        systemUnderTest.loadData()
+
+        systemUnderTest.onItemLongPress(1)
+
+        systemUnderTest.tvProgramsListState.value shouldBe mockkNoFavoriteTvProgrammeList
+    }
 }

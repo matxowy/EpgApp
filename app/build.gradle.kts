@@ -50,33 +50,49 @@ android {
     }
 }
 
+val appCompatVersion: String by project
+val coreKtxVersion: String by project
+val composeBomVersion: String by project
+val composeFoundationVersion: String by project
+val hiltNavigationComposeVersion: String by project
+val navigationComposeVersion: String by project
+val activityComposeVersion: String by project
+val viewModelComposeVersion: String by project
+val coilVersion: String by project
+val hiltVersion: String by project
+val retrofitVersion: String by project
+val coroutinesVersion: String by project
+val mockkVersion: String by project
+val kotestVersion: String by project
+val coroutinesTestVersion: String by project
+val junitVersion: String by project
+
 dependencies {
-    // TODO Extract libraries version
-    implementation("androidx.appcompat:appcompat:1.4.2")
-    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.appcompat:appcompat:$appCompatVersion")
+    implementation("androidx.core:core-ktx:$coreKtxVersion")
 
     // Compose
-    val composeBom = platform("androidx.compose:compose-bom:2023.04.01")
+    val composeBom = platform("androidx.compose:compose-bom:$composeBomVersion")
     implementation(composeBom)
     androidTestImplementation(composeBom)
 
     // Compose foundation
-    implementation("androidx.compose.foundation:foundation:1.4.3")
+    implementation("androidx.compose.foundation:foundation:$composeFoundationVersion")
 
     // Compose navigation
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation("androidx.hilt:hilt-navigation-compose:$hiltNavigationComposeVersion")
+    implementation("androidx.navigation:navigation-compose:$navigationComposeVersion")
 
     // Integration with activities
-    implementation("androidx.activity:activity-compose:1.7.0")
+    implementation("androidx.activity:activity-compose:$activityComposeVersion")
     // Integration with ViewModels
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$viewModelComposeVersion")
     // Integration with LiveData
     implementation("androidx.compose.runtime:runtime-livedata")
 
     // Coil
-    implementation("io.coil-kt:coil:2.3.0")
-    implementation("io.coil-kt:coil-compose:2.3.0")
+    implementation("io.coil-kt:coil:$coilVersion")
+    implementation("io.coil-kt:coil-compose:$coilVersion")
 
     // Material Design 3
     implementation("androidx.compose.material3:material3")
@@ -86,20 +102,20 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 
     // Dagger Hilt
-    implementation("com.google.dagger:hilt-android:2.44.2")
-    kapt("com.google.dagger:hilt-android-compiler:2.44.2")
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 
     // Testing
-    testImplementation("io.mockk:mockk:1.13.5")
-    testImplementation("io.kotest:kotest-assertions-core-jvm:5.6.1")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
-    testImplementation("junit:junit:4.12")
+    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesTestVersion")
+    testImplementation("junit:junit:$junitVersion")
 }

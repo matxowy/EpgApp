@@ -8,7 +8,7 @@ data class TvProgramme(
     val imageUrl: String,
     val type: String,
     val category: TvProgrammeCategory,
-    val isFavourite: Boolean,
+    val isFavorite: Boolean,
     val startTime: LocalDateTime,
     val endTime: LocalDateTime,
     val progressPercent: Int

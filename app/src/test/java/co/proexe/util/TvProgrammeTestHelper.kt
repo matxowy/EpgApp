@@ -7,6 +7,11 @@ import co.proexe.data.source.tvprogramme.model.data.TvProgrammeCategory
 import java.time.LocalDateTime
 
 object TvProgrammeTestHelper {
+    const val startTime = "2023-05-17T09:34:50"
+    const val endTime = "2023-05-17T11:34:50"
+    const val endTimeDateRaw = "Fri Jul 29 13:45:52 GMT+02:00 2022"
+    const val startTimeDateRaw = "Fri Jul 29 11:11:52 GMT+02:00 2022"
+
     val mockkTvProgrammeList = listOf(
         TvProgramme(
             id = 0,
@@ -14,9 +19,9 @@ object TvProgrammeTestHelper {
             imageUrl = "",
             type = "Paradokument",
             category = TvProgrammeCategory.ALL,
-            isFavourite = false,
-            startTime = LocalDateTime.now(),
-            endTime = LocalDateTime.now().plusHours(2),
+            isFavorite = false,
+            startTime = LocalDateTime.parse(startTime),
+            endTime = LocalDateTime.parse(endTime),
             progressPercent = 0
         ),
         TvProgramme(
@@ -25,15 +30,105 @@ object TvProgrammeTestHelper {
             imageUrl = "",
             type = "Kryminał",
             category = TvProgrammeCategory.ALL,
-            isFavourite = true,
-            startTime = LocalDateTime.now(),
-            endTime = LocalDateTime.now().plusHours(2),
+            isFavorite = true,
+            startTime = LocalDateTime.parse(startTime),
+            endTime = LocalDateTime.parse(endTime),
+            progressPercent = 0
+        ),
+    )
+    val mockkNoFavoriteTvProgrammeList = listOf(
+        TvProgramme(
+            id = 0,
+            title = "Ukryta prawda",
+            imageUrl = "",
+            type = "Paradokument",
+            category = TvProgrammeCategory.ALL,
+            isFavorite = false,
+            startTime = LocalDateTime.parse(startTime),
+            endTime = LocalDateTime.parse(endTime),
+            progressPercent = 0
+        ),
+        TvProgramme(
+            id = 1,
+            title = "Pojedynek",
+            imageUrl = "",
+            type = "Kryminał",
+            category = TvProgrammeCategory.ALL,
+            isFavorite = false,
+            startTime = LocalDateTime.parse(startTime),
+            endTime = LocalDateTime.parse(endTime),
+            progressPercent = 0
+        ),
+        TvProgramme(
+            id = 2,
+            title = "Hobbit",
+            imageUrl = "",
+            type = "Przygodowy",
+            category = TvProgrammeCategory.KIDS,
+            isFavorite = false,
+            startTime = LocalDateTime.parse(startTime),
+            endTime = LocalDateTime.parse(endTime),
+            progressPercent = 0
+        ),
+        TvProgramme(
+            id = 3,
+            title = "Harry Potter",
+            imageUrl = "",
+            type = "Przygodowy",
+            category = TvProgrammeCategory.KIDS,
+            isFavorite = false,
+            startTime = LocalDateTime.parse(startTime),
+            endTime = LocalDateTime.parse(endTime),
             progressPercent = 0
         ),
     )
 
-    const val endTimeDateRaw = "Fri Jul 29 13:45:52 GMT+02:00 2022"
-    const val startTimeDateRaw = "Fri Jul 29 11:11:52 GMT+02:00 2022"
+    val mockkFavoriteOnTopTvProgrammeList = listOf(
+        TvProgramme(
+            id = 1,
+            title = "Pojedynek",
+            imageUrl = "",
+            type = "Kryminał",
+            category = TvProgrammeCategory.ALL,
+            isFavorite = true,
+            startTime = LocalDateTime.parse(startTime),
+            endTime = LocalDateTime.parse(endTime),
+            progressPercent = 0
+        ),
+        TvProgramme(
+            id = 0,
+            title = "Ukryta prawda",
+            imageUrl = "",
+            type = "Paradokument",
+            category = TvProgrammeCategory.ALL,
+            isFavorite = false,
+            startTime = LocalDateTime.parse(startTime),
+            endTime = LocalDateTime.parse(endTime),
+            progressPercent = 0
+        ),
+        TvProgramme(
+            id = 2,
+            title = "Hobbit",
+            imageUrl = "",
+            type = "Przygodowy",
+            category = TvProgrammeCategory.KIDS,
+            isFavorite = false,
+            startTime = LocalDateTime.parse(startTime),
+            endTime = LocalDateTime.parse(endTime),
+            progressPercent = 0
+        ),
+        TvProgramme(
+            id = 3,
+            title = "Harry Potter",
+            imageUrl = "",
+            type = "Przygodowy",
+            category = TvProgrammeCategory.KIDS,
+            isFavorite = false,
+            startTime = LocalDateTime.parse(startTime),
+            endTime = LocalDateTime.parse(endTime),
+            progressPercent = 0
+        ),
+    )
 
     val listOfPreloadedTvPrograms = listOf(
         PreloadedTvProgramme(
@@ -41,7 +136,7 @@ object TvProgrammeTestHelper {
             endTimeDateRaw = endTimeDateRaw,
             id = 0,
             imageUrl = "",
-            isFavourite = false,
+            isFavorite = false,
             progressPercent = 45,
             startTimeDateRaw = startTimeDateRaw,
             title = "Pojedynek",
@@ -54,7 +149,7 @@ object TvProgrammeTestHelper {
             category = TvProgrammeCategory.ALL,
             id = 0,
             imageUrl = "",
-            isFavourite = false,
+            isFavorite = false,
             progressPercent = 45,
             title = "Pojedynek",
             type = "Kryminal",

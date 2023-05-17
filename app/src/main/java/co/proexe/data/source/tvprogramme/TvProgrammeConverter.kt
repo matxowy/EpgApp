@@ -22,7 +22,7 @@ class TvProgrammeConverter @Inject constructor() {
         imageUrl = preloadedTvProgramme.imageUrl,
         type = preloadedTvProgramme.type,
         category = setCategory(preloadedTvProgramme.category),
-        isFavourite = preloadedTvProgramme.isFavourite,
+        isFavorite = preloadedTvProgramme.isFavorite,
         startTime = preloadedTvProgramme.startTimeDateRaw.toLocalDateTime(),
         endTime = preloadedTvProgramme.endTimeDateRaw.toLocalDateTime(),
         progressPercent = preloadedTvProgramme.progressPercent
